@@ -41,7 +41,31 @@ ament_target_dependencies(
   ${THIS_PACKAGE_INCLUDE_DEPENDS}
 )
 
+target_compile_definitions(${PROJECT_NAME} PRIVATE "ROBOTIQ_DRIVER_DLL")
 pluginlib_export_plugin_description_file(hardware_interface hardware_interface_plugin.xml)
+
+# COMPILE
+add_library(
+  ${PROJECT_NAME}_hande
+  SHARED
+  src/crc.cpp
+  src/hardware_interface.cpp
+  src/robotiq_gripper_interface.cpp
+  src/hande_hardware_interface.cpp
+)
+target_include_directories(
+  ${PROJECT_NAME}_hande
+  PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:include>
+)
+ament_target_dependencies(
+  ${PROJECT_NAME}_hande
+  ${THIS_PACKAGE_INCLUDE_DEPENDS}
+)
+
+target_compile_definitions(${PROJECT_NAME} PRIVATE "ROBOTIQ_DRIVER_HANDE_DLL")
+pluginlib_export_plugin_description_file(hardware_interface hande_hardware_interface_plugin.xml)
 
 add_executable(gripper_interface_test src/gripper_interface_test.cpp)
 target_include_directories(gripper_interface_test PRIVATE include)
@@ -72,6 +96,14 @@ install(
   DIRECTORY launch
   DESTINATION share/${PROJECT_NAME}
 )
+install(
+  TARGETS ${PROJECT_NAME}_hande
+  EXPORT export_${PROJECT_NAME}
+  ARCHIVE DESTINATION lib/${PROJECT_NAME}
+  LIBRARY DESTINATION lib
+  RUNTIME DESTINATION bin
+)
+
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)

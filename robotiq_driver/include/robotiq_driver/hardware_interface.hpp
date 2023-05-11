@@ -73,7 +73,7 @@ public:
   ROBOTIQ_DRIVER_PUBLIC
   hardware_interface::return_type write(const rclcpp::Time& time, const rclcpp::Duration& period) override;
 
-private:
+protected:
   static constexpr double NO_NEW_CMD_ = std::numeric_limits<double>::quiet_NaN();
 
   double gripper_position_;

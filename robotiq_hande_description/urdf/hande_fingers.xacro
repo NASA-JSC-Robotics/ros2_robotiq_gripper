@@ -1,0 +1,77 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <xacro:macro name="hande_fingers" params="
+    name:=''
+    prefix:=''
+    mount_x:=0.025
+    mount_y:=0.0
+    mount_z:=0.099
+    mount_roll:=0.0
+    mount_pitch:=0.0
+    mount_yaw:=0.0
+    scale:=0.001">
+
+    <link name="${prefix}finger_1_link">
+      <inertial>
+        <origin rpy="0 0 0" xyz="-0.02262 0.00759 0.00738"/>
+        <mass value="0.03804"/>
+        <inertia ixx="13567E-9" ixy="1849E-9" ixz="-3622E-9" iyy="15784E-9" iyz="-3616E-9" izz="7478E-9"/>
+      </inertial>
+      <visual>
+          <origin xyz="0.0 0.0 0.0" rpy="0 0 0"/>
+          <geometry>
+            <mesh filename="package://robotiq_hande_description/meshes/finger_1.stl" scale="${scale} ${scale} ${scale}"/>
+          </geometry>
+          <material name="${prefix}dark_gray"/>
+      </visual>
+      <collision>
+          <origin xyz="0.0 0.0 0.0" rpy="0 0 0"/>
+          <geometry>
+            <mesh filename="package://robotiq_hande_description/meshes/finger_1.stl" scale="${scale} ${scale} ${scale}"/>
+          </geometry>
+          <material name="${prefix}dark_gray"/>
+      </collision>
+    </link>
+
+    <link name="${prefix}finger_2_link">
+      <inertial>
+        <origin rpy="0 0 0" xyz="0.02262 -0.00759 0.00738"/>
+        <mass value="0.03804"/>
+        <inertia ixx="13567E-9" ixy="1849E-9" ixz="3622E-9" iyy="15784E-9" iyz="3616E-9" izz="7478E-9"/>
+      </inertial>
+      <visual>
+          <origin xyz="0.0 0.0 0.0" rpy="0 0 0"/>
+          <geometry>
+            <mesh filename="package://robotiq_hande_description/meshes/finger_1.stl" scale="${scale} ${scale} ${scale}"/>
+          </geometry>
+          <material name="${prefix}dark_gray"/>
+      </visual>
+      <collision>
+          <origin xyz="0.0 0.0 0.0" rpy="0 0 0"/>
+          <geometry>
+            <mesh filename="package://robotiq_hande_description/meshes/finger_1.stl" scale="${scale} ${scale} ${scale}"/>
+          </geometry>
+          <material name="${prefix}dark_gray"/>
+      </collision>
+    </link>
+
+    <joint name="${prefix}finger_1_joint" type="prismatic">
+      <origin rpy="${mount_roll} ${mount_pitch} ${mount_yaw + pi}" xyz="${mount_x} ${mount_y} ${mount_z}"/>
+      <parent link="${prefix}gripper_base_link"/>
+      <child link="${prefix}finger_1_link"/>
+      <axis xyz="1 0 0"/>
+      <limit effort="130" lower="0" upper="0.025" velocity="0.15"/>
+    </joint>
+
+    <joint name="${prefix}finger_2_joint" type="prismatic">
+      <origin rpy="${mount_roll} ${mount_pitch} ${mount_yaw}" xyz="${-mount_x} ${-mount_y} ${mount_z}"/>
+      <parent link="${prefix}gripper_base_link"/>
+      <child link="${prefix}finger_2_link"/>
+      <axis xyz="1 0 0"/>
+      <limit effort="130" lower="0" upper="0.025" velocity="0.15"/>
+      <mimic joint="${prefix}finger_1_joint" multiplier="1" offset="0"/>
+    </joint>
+
+  </xacro:macro>
+</robot>

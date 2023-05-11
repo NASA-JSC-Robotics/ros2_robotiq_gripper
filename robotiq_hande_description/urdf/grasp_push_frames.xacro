@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <xacro:macro name="grasp_push_frames" params="
+    name:=''
+    prefix:=''
+    marker_opacity:=0.5
+    grasp_distance:=0.130
+    finger_length:=0.046
+    push_marker_size:=0.01">
+
+    <link name="${prefix}grasp_frame">
+      <visual>
+        <geometry>
+          <sphere radius="0.007"/>
+        </geometry>
+        <material name="${prefix}_green">
+          <color rgba="0 1.0 0 ${marker_opacity}"/>
+        </material>
+      </visual>
+    </link>
+
+    <joint name="${prefix}grasp_frame_joint" type="fixed">
+      <parent link="${prefix}gripper_base_link"/>
+      <child link="${prefix}grasp_frame"/>
+      <origin xyz="0.0 0.0 ${grasp_distance}" rpy="0 0 0"/>
+    </joint>
+
+    <link name="${prefix}push_frame_1">
+      <visual>
+        <origin xyz="0.0 0.0 ${push_marker_size / 8}" rpy="0 0 0"/>
+        <geometry>
+          <box size="${push_marker_size} ${push_marker_size} ${push_marker_size / 4}"/>
+        </geometry>
+        <material name="${prefix}_red">
+          <color rgba="1.0 0 0 ${marker_opacity}"/>
+        </material>
+      </visual>
+    </link>
+
+    <joint name="${prefix}push_frame_1_joint" type="fixed">
+      <parent link="${prefix}finger_1_link"/>
+      <child link="${prefix}push_frame_1"/>
+      <origin xyz="0.03 0.0 ${finger_length}" rpy="0 0 0"/>
+    </joint>
+
+    <link name="${prefix}push_frame_2">
+      <visual>
+        <origin xyz="0.0 0.0 ${push_marker_size / 8} " rpy="0 0 0"/>
+        <geometry>
+          <box size="${push_marker_size} ${push_marker_size} ${push_marker_size / 4} "/>
+        </geometry>
+        <material name="${prefix}_red">
+          <color rgba="1.0 0 0 ${marker_opacity}"/>
+        </material>
+      </visual>
+    </link>
+
+    <joint name="${prefix}push_frame_2_joint" type="fixed">
+      <parent link="${prefix}finger_2_link"/>
+      <child link="${prefix}push_frame_2"/>
+      <origin xyz="0.03 0.0 ${finger_length}" rpy="0 0 0"/>
+    </joint>
+
+  </xacro:macro>
+</robot>
