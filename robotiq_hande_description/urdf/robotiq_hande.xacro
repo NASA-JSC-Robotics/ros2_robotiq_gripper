@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+  <xacro:arg name="use_fake_hardware" default="false"/>
+
+  <xacro:include filename="$(find robotiq_hande_description)/urdf/robotiq_hande.ros2_control.xacro"/>
+
+  <xacro:macro name="robotiq_hande" params="
+    name
+    prefix
+    parent
+    *origin
+    use_fake_hardware:=false
+    fake_sensor_commands:=false
+    com_port:=/dev/ttyUSB1">
+
+    <material name="${prefix}dark_gray">
+      <color rgba="0.2 0.2 0.2 1"/>
+    </material>
+
+    <material name="${prefix}black">
+      <color rgba="0 0 0 1"/>
+    </material>
+
+    <!-- ros2 control instance -->
+    <xacro:robotiq_hande_ros2_control
+        name="${name}" 
+        prefix="${prefix}"
+        use_fake_hardware="${use_fake_hardware}"
+        fake_sensor_commands="${fake_sensor_commands}"
+        com_port="${com_port}"
+        />
+
+    <joint name="${prefix}gripper_base_joint" type="fixed">
+      <parent link="${parent}"/>
+      <child link="${prefix}gripper_base_link"/>
+      <xacro:insert_block name="origin"/>
+    </joint>
+
+    <link name="${prefix}gripper_base_link">
+      <inertial>
+        <origin xyz="0 0 0.04607" rpy="0 0 0" />
+        <mass value="0.86387" />
+        <inertia ixx="1017560E-9" ixy="0" ixz="2235E-9" iyy="1028041E-9" iyz="0" izz="489810E-9" />
+      </inertial>
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://robotiq_hande_description/meshes/hand-e.dae" scale="0.001 0.001 0.001"/>
+        </geometry>
+        <material name="${prefix}black"/>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://robotiq_hande_description/meshes/hand-e.dae" scale="0.001 0.001 0.001"/>
+        </geometry>
+        <material name="${prefix}black"/>
+      </collision>
+    </link>
+
+  </xacro:macro>
+</robot>

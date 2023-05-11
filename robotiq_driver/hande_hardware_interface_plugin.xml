@@ -1,0 +1,7 @@
+<library path="robotiq_driver_hande">
+    <class name="robotiq_driver_hande/RobotiqGripperHandeHardwareInterface" type="robotiq_driver_hande::RobotiqGripperHandeHardwareInterface" base_class_type="hardware_interface::SystemInterface">
+        <description>
+            ROS2 controller for the Robotiq Hande gripper.
+        </description>
+    </class>
+</library>

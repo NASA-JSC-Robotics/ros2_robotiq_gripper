@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+
+<robot xmlns:xacro="http://wiki.ros.org/xacro" name="robotiq_hande">
+  <xacro:arg name="name" default="RobotiqGripperHandeHardwareInterface"/>
+  <xacro:arg name="prefix" default=""/>
+  <xacro:arg name="use_fake_hardware" default="false"/>
+  <xacro:arg name="com_port" default="/dev/ttyACM0"/>
+
+  <xacro:include filename="$(find robotiq_hande_description)/urdf/robotiq_hande.xacro"/>
+  <xacro:include filename="$(find robotiq_hande_description)/urdf/hande_fingers.xacro"/>
+  <xacro:include filename="$(find robotiq_hande_description)/urdf/grasp_push_frames.xacro"/>
+
+  <link name="world"/>
+
+  <xacro:robotiq_hande name="$(arg name)" prefix="$(arg prefix)" parent="world" use_fake_hardware="$(arg use_fake_hardware)" com_port="$(arg com_port)">
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </xacro:robotiq_hande>
+
+  <xacro:hande_fingers name="$(arg name)" prefix="$(arg prefix)"/>
+
+  <xacro:grasp_push_frames name="$(arg name)" prefix="$(arg prefix)"/>
+
+</robot>
