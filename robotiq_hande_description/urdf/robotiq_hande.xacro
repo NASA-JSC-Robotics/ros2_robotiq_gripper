@@ -58,5 +58,22 @@
       </collision>
     </link>
 
+    <joint name="${prefix}gripper_palm_joint" type="fixed">
+      <parent link="${parent}"/>
+      <child link="${prefix}gripper_palm_link"/>
+      <origin xyz="0.0 0.0 0.0988" rpy="0 0 0"/>
+    </joint>
+
+    <link name="${prefix}gripper_palm_link">
+    <visual>
+        <geometry>
+          <sphere radius="0.007"/>
+        </geometry>
+        <material name="${prefix}_green">
+          <color rgba="0 1.0 0 0.5"/>
+        </material>
+      </visual>
+    </link>
+
   </xacro:macro>
 </robot>
