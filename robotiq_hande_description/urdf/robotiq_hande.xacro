@@ -59,7 +59,7 @@
     </link>
 
     <joint name="${prefix}gripper_palm_joint" type="fixed">
-      <parent link="${parent}"/>
+      <parent link="${prefix}gripper_base_link"/>
       <child link="${prefix}gripper_palm_link"/>
       <origin xyz="0.0 0.0 0.0988" rpy="0 0 0"/>
     </joint>
