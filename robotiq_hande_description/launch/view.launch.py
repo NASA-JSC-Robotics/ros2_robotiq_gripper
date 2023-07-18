@@ -16,9 +16,9 @@ def generate_launch_description():
     )
     declared_arguments.append(
         DeclareLaunchArgument(
-            "prefix",
+            "tf_prefix",
             default_value="''",
-            description="Prefix of the joint names, useful for \
+            description="tf_prefix of the joint names, useful for \
                 multi-robot setup. If changed than also joint names in the controllers' configuration \
                 have to be updated.",
         )
@@ -33,7 +33,7 @@ def generate_launch_description():
 
     # Initialize arguments
     use_fake_hardware = LaunchConfiguration("use_fake_hardware")
-    prefix = LaunchConfiguration("prefix")
+    tf_prefix = LaunchConfiguration("tf_prefix")
     name = LaunchConfiguration("name")
 
     robot_description_content = Command(
@@ -42,7 +42,7 @@ def generate_launch_description():
             " ",
             PathJoinSubstitution([FindPackageShare("robotiq_hande_description"), "urdf", "robotiq_gripper_hande.urdf.xacro"]),
             " ", "use_fake_hardware:=", use_fake_hardware,
-            " ", "prefix:=", prefix,
+            " ", "tf_prefix:=", tf_prefix,
             " ", "name:=", name,
         ]
     )

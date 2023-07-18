@@ -6,37 +6,60 @@
 
   <xacro:macro name="robotiq_hande" params="
     name
-    prefix
+    tf_prefix
     parent
     *origin
     use_fake_hardware:=false
     fake_sensor_commands:=false
     com_port:=/dev/ttyUSB1">
 
-    <material name="${prefix}dark_gray">
+    <material name="${tf_prefix}dark_gray">
       <color rgba="0.2 0.2 0.2 1"/>
     </material>
 
-    <material name="${prefix}black">
+    <material name="${tf_prefix}black">
       <color rgba="0 0 0 1"/>
     </material>
 
     <!-- ros2 control instance -->
     <xacro:robotiq_hande_ros2_control
         name="${name}" 
-        prefix="${prefix}"
+        tf_prefix="${tf_prefix}"
         use_fake_hardware="${use_fake_hardware}"
         fake_sensor_commands="${fake_sensor_commands}"
         com_port="${com_port}"
         />
 
-    <joint name="${prefix}gripper_base_joint" type="fixed">
+    <joint name="${tf_prefix}gripper_adapter_joint" type="fixed">
       <parent link="${parent}"/>
-      <child link="${prefix}gripper_base_link"/>
+      <child link="${tf_prefix}robotiq_hande_cb_adapter"/>
       <xacro:insert_block name="origin"/>
     </joint>
 
-    <link name="${prefix}gripper_base_link">
+    <link name="${tf_prefix}robotiq_hande_cb_adapter">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <visual>
+        <geometry>
+          <mesh filename="package://robotiq_hande_description/meshes/visual/robotiq_hande_cb_adapter.dae"/>
+        </geometry>
+        <material name="${tf_prefix}black"/>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0.006" rpy="0 0 0" />
+        <geometry>
+          <cylinder length="0.018" radius="0.038"/>
+        </geometry>
+        <material name="${tf_prefix}black"/>
+      </collision>
+    </link>
+
+    <joint name="${tf_prefix}gripper_base_joint" type="fixed">
+      <parent link="${tf_prefix}robotiq_hande_cb_adapter"/>
+      <child link="${tf_prefix}gripper_base_link"/>
+      <origin xyz="0.0 0.0 0.011" rpy="0 0 0"/>
+    </joint>
+
+    <link name="${tf_prefix}gripper_base_link">
       <inertial>
         <origin xyz="0 0 0.04607" rpy="0 0 0" />
         <mass value="0.86387" />
@@ -45,31 +68,31 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
-          <mesh filename="package://robotiq_hande_description/meshes/hand-e.dae" scale="0.001 0.001 0.001"/>
+          <mesh filename="package://robotiq_hande_description/meshes/visual/hande.dae" scale="0.001 0.001 0.001"/>
         </geometry>
-        <material name="${prefix}black"/>
+        <material name="${tf_prefix}black"/>
       </visual>
       <collision>
-        <origin xyz="0 0 0" rpy="0 0 0" />
+        <origin xyz="0 0 0.050" rpy="0 0 0" />
         <geometry>
-          <mesh filename="package://robotiq_hande_description/meshes/hand-e.dae" scale="0.001 0.001 0.001"/>
+          <cylinder length="0.10" radius="0.038"/>
         </geometry>
-        <material name="${prefix}black"/>
+        <material name="${tf_prefix}black"/>
       </collision>
     </link>
 
-    <joint name="${prefix}gripper_palm_joint" type="fixed">
-      <parent link="${prefix}gripper_base_link"/>
-      <child link="${prefix}gripper_palm_link"/>
+    <joint name="${tf_prefix}gripper_palm_joint" type="fixed">
+      <parent link="${tf_prefix}gripper_base_link"/>
+      <child link="${tf_prefix}gripper_palm_link"/>
       <origin xyz="0.0 0.0 0.0988" rpy="0 0 0"/>
     </joint>
 
-    <link name="${prefix}gripper_palm_link">
-    <visual>
+    <link name="${tf_prefix}gripper_palm_link">
+      <visual>
         <geometry>
           <sphere radius="0.007"/>
         </geometry>
-        <material name="${prefix}_green">
+        <material name="${tf_prefix}_green">
           <color rgba="0 1.0 0 0.5"/>
         </material>
       </visual>
