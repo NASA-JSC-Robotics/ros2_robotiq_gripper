@@ -10,6 +10,8 @@ from launch.actions import DeclareLaunchArgument
 import launch_ros
 from launch_ros.substitutions import FindPackageShare
 import os
+from launch.conditions import IfCondition, UnlessCondition
+
 
 
 def generate_launch_description():
@@ -36,6 +38,14 @@ def generate_launch_description():
             "name",
             default_value='robotiq_gripper_hande',
             description="Name of the robot. Gets used by ros2 control",
+        )
+    )
+
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            "rviz",
+            default_value='false',
+            description="start rviz?",
         )
     )
 
@@ -72,6 +82,7 @@ def generate_launch_description():
     use_fake_hardware = LaunchConfiguration("use_fake_hardware")
     prefix = LaunchConfiguration("prefix")
     name = LaunchConfiguration("name")
+    rviz = LaunchConfiguration("rviz")
 
     robot_description_content = Command(
         [
@@ -137,6 +148,7 @@ def generate_launch_description():
         name="rviz2",
         output="log",
         arguments=["-d", LaunchConfiguration("rvizconfig")],
+        condition=IfCondition(rviz)
     )
 
     nodes = [
