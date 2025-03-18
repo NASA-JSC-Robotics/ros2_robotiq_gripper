@@ -30,6 +30,7 @@
     <xacro:robotiq_hande_ros2_control
         name="${name}"
         tf_prefix="${tf_prefix}"
+        sim_ignition="${sim_ignition}"
         use_fake_hardware="${use_fake_hardware}"
         fake_sensor_commands="${fake_sensor_commands}"
         com_port="${com_port}"
