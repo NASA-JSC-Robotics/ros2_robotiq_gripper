@@ -3,12 +3,14 @@
   <xacro:arg name="use_fake_hardware" default="false"/>
 
   <xacro:include filename="$(find robotiq_hande_description)/urdf/robotiq_hande.ros2_control.xacro"/>
+  <xacro:include filename="$(find robotiq_hande_description)/urdf/gen_mesh.xacro"/>
 
   <xacro:macro name="robotiq_hande" params="
     name
     tf_prefix
     parent
     *origin
+    sim_ignition:=false
     use_fake_hardware:=false
     fake_sensor_commands:=false
     com_port:=/dev/ttyUSB1">
@@ -21,9 +23,12 @@
       <color rgba="0 0 0 1"/>
     </material>
 
+    <!-- if ignition or gazebo - need to use absolute paths instead of relative, applies locally -->
+    <xacro:property name="force_abs_paths" value="$(arg sim_ignition)" />
+
     <!-- ros2 control instance -->
     <xacro:robotiq_hande_ros2_control
-        name="${name}" 
+        name="${name}"
         tf_prefix="${tf_prefix}"
         use_fake_hardware="${use_fake_hardware}"
         fake_sensor_commands="${fake_sensor_commands}"
@@ -46,7 +51,10 @@
       <origin xyz="0 0 0" rpy="0 0 0" />
       <visual>
         <geometry>
-          <mesh filename="package://robotiq_hande_description/meshes/visual/robotiq_hande_cb_adapter.dae"/>
+          <xacro:gen_mesh
+            force_abs_path="${force_abs_paths}"
+            pkg_name="robotiq_hande_description"
+            file_path="meshes/visual/robotiq_hande_cb_adapter.dae" />
         </geometry>
         <material name="${tf_prefix}black"/>
       </visual>
@@ -74,7 +82,11 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
-          <mesh filename="package://robotiq_hande_description/meshes/visual/hande.dae" scale="0.001 0.001 0.001"/>
+          <xacro:gen_mesh
+            force_abs_path="${force_abs_paths}"
+            pkg_name="robotiq_hande_description"
+            file_path="meshes/visual/hande.dae"
+            scale="0.001 0.001 0.001"/>
         </geometry>
         <material name="${tf_prefix}black"/>
       </visual>
