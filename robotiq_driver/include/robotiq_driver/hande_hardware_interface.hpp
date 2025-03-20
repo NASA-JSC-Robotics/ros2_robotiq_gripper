@@ -1,7 +1,7 @@
 
 #pragma once
 
-#include "robotiq_driver/robotiq_gripper_interface.hpp"
+#include "robotiq_driver/hardware_interface.hpp"
 #include "hardware_interface/system_interface.hpp"
 
 namespace robotiq_driver_hande
@@ -20,8 +20,8 @@ public:
   ROBOTIQ_DRIVER_PUBLIC
   hardware_interface::return_type write(const rclcpp::Time& time, const rclcpp::Duration& period) override;
 
-protected:
-  std::unique_ptr<RobotiqGripperInterface> gripper_interface_;
+// protected:
+//   std::unique_ptr<RobotiqGripperInterface> gripper_interface_;
 
 };
 

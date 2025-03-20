@@ -14,6 +14,8 @@
 
 constexpr double kGripperMinPos = 0.0;
 constexpr double kGripperMaxPos = 255.0;
+constexpr double kGripperMaxSpeed = 0.15;  // m/s
+constexpr double kGripperMaxForce = 185;    // N
 
 const auto kLogger = rclcpp::get_logger("RobotiqGripperHandeHardwareInterface");
 
