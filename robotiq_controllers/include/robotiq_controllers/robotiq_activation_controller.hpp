@@ -29,7 +29,6 @@
 #pragma once
 
 #include "controller_interface/controller_interface.hpp"
-
 #include "std_srvs/srv/trigger.hpp"
 
 namespace robotiq_controllers
