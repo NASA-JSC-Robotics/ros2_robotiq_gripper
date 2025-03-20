@@ -50,7 +50,6 @@ hardware_interface::return_type RobotiqGripperHandeHardwareInterface::write(cons
                                                                             const rclcpp::Duration& /*period*/)
 {
   double gripper_pos = (1.0 - ((2 * gripper_position_command_) / gripper_closed_pos_)) * kGripperMaxPos + kGripperMinPos;
-  double gripper_pos = (gripper_position_command_ / gripper_closed_pos_) * kGripperRange + kGripperMinPos;
 
   gripper_pos = std::max(std::min(gripper_pos, kGripperMaxPos), kGripperMinPos);
   write_command_.store(uint8_t(gripper_pos));
