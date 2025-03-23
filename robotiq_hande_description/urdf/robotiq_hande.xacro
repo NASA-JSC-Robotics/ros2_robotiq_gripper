@@ -45,11 +45,11 @@
     </joint>
 
     <link name="${tf_prefix}robotiq_hande_cb_adapter">
-      <!--TODO set proper inertia-->
+      <!--Not sure if these are right, based on the robotiq numbers for ur_to_robotiq_link-->
       <inertial>
-        <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
-        <mass value="0.0"/>
-        <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0"/>
+        <mass value="0.01" />
+        <origin xyz="0 0 0" />
+        <inertia ixx="0.000044" ixy="0.0" ixz="0.0" iyy="0.000027" iyz="0.0" izz="0.000027" />
       </inertial>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <visual>
