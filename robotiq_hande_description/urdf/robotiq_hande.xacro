@@ -24,7 +24,7 @@
     </material>
 
     <!-- if ignition or gazebo - need to use absolute paths instead of relative, applies locally -->
-    <xacro:property name="force_abs_paths" value="$(arg sim_ignition)" />
+    <xacro:property name="force_abs_paths" value="${sim_ignition}" />
 
     <!-- ros2 control instance -->
     <xacro:robotiq_hande_ros2_control
