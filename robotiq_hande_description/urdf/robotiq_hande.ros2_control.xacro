@@ -41,10 +41,10 @@
       </xacro:if>
 
       <!-- Only add this with fake hardware mode -->
-      <xacro:if value="${use_fake_hardware}">
+      <xacro:if value="${use_fake_hardware or sim_ignition}">
           <gpio name="reactivate_gripper">
-              <command_interface name="reactivate_gripper_cmd" />
-              <command_interface name="reactivate_gripper_response" />
+              <command_interface name="${tf_prefix}reactivate_gripper_cmd" />
+              <command_interface name="${tf_prefix}reactivate_gripper_response" />
           </gpio>
       </xacro:if>
 
