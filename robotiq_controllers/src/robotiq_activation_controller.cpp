@@ -107,7 +107,7 @@ rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn Roboti
   }
   catch (const std::exception& e)
   {
-    fprintf(stderr, "Exception thrown during init stage with message: %s \n", e.what());
+    RCLCPP_ERROR(get_node()->get_logger(), "Exception thrown during init stage with message: %s", e.what());
     return controller_interface::CallbackReturn::ERROR;
   }
 
