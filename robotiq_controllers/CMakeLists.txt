@@ -9,16 +9,26 @@ endif()
 find_package(ament_cmake REQUIRED)
 find_package(controller_interface REQUIRED)
 find_package(std_srvs REQUIRED)
+find_package(generate_parameter_library REQUIRED)
 
 set(THIS_PACKAGE_INCLUDE_DEPENDS
   controller_interface
   std_srvs
+  generate_parameter_library
 )
 
 include_directories(include)
 
+generate_parameter_library(robotiq_activation_controller_parameters
+  src/robotiq_activation_controller_parameters.yaml
+)
+
 add_library(${PROJECT_NAME} SHARED
   src/robotiq_activation_controller.cpp
+)
+
+target_link_libraries(${PROJECT_NAME}
+  robotiq_activation_controller_parameters
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE
@@ -33,7 +43,7 @@ pluginlib_export_plugin_description_file(controller_interface controller_plugins
 
 # # INSTALL
 install(
-  TARGETS ${PROJECT_NAME}
+  TARGETS ${PROJECT_NAME} robotiq_activation_controller_parameters
   EXPORT export_${PROJECT_NAME}
   ARCHIVE DESTINATION lib/${PROJECT_NAME}
   LIBRARY DESTINATION lib

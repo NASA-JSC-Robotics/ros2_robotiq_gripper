@@ -35,8 +35,9 @@ controller_interface::InterfaceConfiguration RobotiqActivationController::comman
   controller_interface::InterfaceConfiguration config;
   config.type = controller_interface::interface_configuration_type::INDIVIDUAL;
 
-  config.names.emplace_back("reactivate_gripper/reactivate_gripper_cmd");
-  config.names.emplace_back("reactivate_gripper/reactivate_gripper_response");
+  // tf prefix used here so that we can differentiate between two different grippers on the same robot
+  config.names.emplace_back(params_.tf_prefix + "reactivate_gripper/reactivate_gripper_cmd");
+  config.names.emplace_back(params_.tf_prefix + "reactivate_gripper/reactivate_gripper_response");
 
   return config;
 }
@@ -99,6 +100,17 @@ RobotiqActivationController::on_deactivate(const rclcpp_lifecycle::State& /*prev
 
 rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn RobotiqActivationController::on_init()
 {
+  try
+  {
+    param_listener_ = std::make_shared<robotiq_activation_controller::ParamListener>(get_node());
+    params_ = param_listener_->get_params();
+  }
+  catch (const std::exception& e)
+  {
+    RCLCPP_ERROR(get_node()->get_logger(), "Exception thrown during init stage with message: %s", e.what());
+    return controller_interface::CallbackReturn::ERROR;
+  }
+
   return LifecycleNodeInterface::CallbackReturn::SUCCESS;
 }
 
