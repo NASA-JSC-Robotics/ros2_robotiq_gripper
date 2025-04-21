@@ -13,7 +13,8 @@
     sim_ignition:=false
     use_fake_hardware:=false
     fake_sensor_commands:=false
-    com_port:=/dev/ttyUSB1">
+    com_port:=/dev/ttyUSB1
+    generate_ros2_control_tag:=true">
 
     <material name="${tf_prefix}dark_gray">
       <color rgba="0.2 0.2 0.2 1"/>
@@ -27,14 +28,15 @@
     <xacro:property name="force_abs_paths" value="${sim_ignition}" />
 
     <!-- ros2 control instance -->
-    <xacro:robotiq_hande_ros2_control
+    <xacro:if value="${generate_ros2_control_tag}">
+      <xacro:robotiq_hande_ros2_control
         name="${name}"
         tf_prefix="${tf_prefix}"
         sim_ignition="${sim_ignition}"
         use_fake_hardware="${use_fake_hardware}"
         fake_sensor_commands="${fake_sensor_commands}"
-        com_port="${com_port}"
-        />
+        com_port="${com_port}" />
+    </xacro:if>
 
     <joint name="${tf_prefix}gripper_adapter_joint" type="fixed">
       <parent link="${parent}"/>
@@ -43,11 +45,11 @@
     </joint>
 
     <link name="${tf_prefix}robotiq_hande_cb_adapter">
-      <!--TODO set proper inertia-->
+      <!--Not sure if these are right, based on the robotiq numbers for ur_to_robotiq_link-->
       <inertial>
-        <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
-        <mass value="0.0"/>
-        <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0"/>
+        <mass value="0.01" />
+        <origin xyz="0 0 0" />
+        <inertia ixx="0.000044" ixy="0.0" ixz="0.0" iyy="0.000027" iyz="0.0" izz="0.000027" />
       </inertial>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <visual>
