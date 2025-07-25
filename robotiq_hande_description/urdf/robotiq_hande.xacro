@@ -108,16 +108,7 @@
       <origin xyz="0.0 0.0 0.0988" rpy="0 0 0"/>
     </joint>
 
-    <link name="${tf_prefix}gripper_palm_link">
-      <visual>
-        <geometry>
-          <sphere radius="0.007"/>
-        </geometry>
-        <material name="${tf_prefix}_green">
-          <color rgba="0 1.0 0 0.5"/>
-        </material>
-      </visual>
-    </link>
+    <link name="${tf_prefix}gripper_palm_link"/>
 
   </xacro:macro>
 </robot>
