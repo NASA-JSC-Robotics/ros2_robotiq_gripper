@@ -38,6 +38,7 @@
 #include <hardware_interface/loaned_state_interface.hpp>
 #include <hardware_interface/resource_manager.hpp>
 #include <hardware_interface/types/lifecycle_state_names.hpp>
+#include <hardware_interface/types/resource_manager_params.hpp>
 
 #include <lifecycle_msgs/msg/state.hpp>
 #include <rclcpp_lifecycle/state.hpp>
@@ -75,7 +76,13 @@ TEST(TestRobotiqGripperHardwareInterface, load_urdf)
        )";
 
   auto urdf = ros2_control_test_assets::urdf_head + urdf_control_ + ros2_control_test_assets::urdf_tail;
-  hardware_interface::ResourceManager rm(urdf);
+
+  hardware_interface::ResourceManagerParams params;
+  params.robot_description = urdf;
+  params.update_rate = 100;
+  params.activate_all = false;
+
+  hardware_interface::ResourceManager rm(params, true);
 
   // Check interfaces
   EXPECT_EQ(1u, rm.system_components_size());
