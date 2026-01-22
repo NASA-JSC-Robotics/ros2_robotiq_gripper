@@ -1,8 +1,14 @@
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
-from launch.substitutions import Command, FindExecutable, LaunchConfiguration, PathJoinSubstitution
+from launch.substitutions import (
+    Command,
+    FindExecutable,
+    LaunchConfiguration,
+    PathJoinSubstitution,
+)
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
+
 
 def generate_launch_description():
     declared_arguments = []
@@ -11,7 +17,7 @@ def generate_launch_description():
         DeclareLaunchArgument(
             "use_fake_hardware",
             description="Run with ros2 control fake hardware interface",
-            default_value="false"
+            default_value="false",
         )
     )
     declared_arguments.append(
@@ -26,7 +32,7 @@ def generate_launch_description():
     declared_arguments.append(
         DeclareLaunchArgument(
             "name",
-            default_value='robotiq_gripper_hande',
+            default_value="robotiq_gripper_hande",
             description="Name of the robot. Gets used by ros2 control",
         )
     )
@@ -40,10 +46,22 @@ def generate_launch_description():
         [
             PathJoinSubstitution([FindExecutable(name="xacro")]),
             " ",
-            PathJoinSubstitution([FindPackageShare("robotiq_hande_description"), "urdf", "robotiq_gripper_hande.urdf.xacro"]),
-            " ", "use_fake_hardware:=", use_fake_hardware,
-            " ", "tf_prefix:=", tf_prefix,
-            " ", "name:=", name,
+            PathJoinSubstitution(
+                [
+                    FindPackageShare("robotiq_hande_description"),
+                    "urdf",
+                    "robotiq_gripper_hande.urdf.xacro",
+                ]
+            ),
+            " ",
+            "use_fake_hardware:=",
+            use_fake_hardware,
+            " ",
+            "tf_prefix:=",
+            tf_prefix,
+            " ",
+            "name:=",
+            name,
         ]
     )
 
@@ -61,7 +79,7 @@ def generate_launch_description():
         package="robot_state_publisher",
         executable="robot_state_publisher",
         output="both",
-        parameters=[robot_description]
+        parameters=[robot_description],
     )
     rviz_node = Node(
         package="rviz2",
