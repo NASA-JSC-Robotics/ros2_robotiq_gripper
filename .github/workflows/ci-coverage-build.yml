@@ -10,7 +10,7 @@ on:
 jobs:
   coverage:
     name: coverage build
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     strategy:
       fail-fast: false
     env:
@@ -20,7 +20,7 @@ jobs:
         with:
           required-ros-distributions: ${{ env.ROS_DISTRO }}
       - uses: actions/checkout@v4
-      - uses: ros-tooling/action-ros-ci@v0.3
+      - uses: ros-tooling/action-ros-ci@v0.4
         with:
           target-ros2-distro: ${{ env.ROS_DISTRO }}
           import-token: ${{ secrets.GITHUB_TOKEN }}
@@ -31,7 +31,7 @@ jobs:
             robotiq_description
 
           vcs-repo-file-url: |
-            https://raw.githubusercontent.com/${{ github.repository }}/${{ github.sha }}/ros2_robotiq_gripper-not-released.${{ env.ROS_DISTRO }}.repos?token=${{ secrets.GITHUB_TOKEN }}
+            https://raw.githubusercontent.com/${{ github.repository }}/${{ github.sha }}/ros2_robotiq_gripper-not-released.${{ env.ROS_DISTRO }}.repos
           colcon-defaults: |
             {
               "build": {
@@ -39,12 +39,12 @@ jobs:
               }
             }
           colcon-mixin-repository: https://raw.githubusercontent.com/colcon/colcon-mixin-repository/master/index.yaml
-      - uses: codecov/codecov-action@v3.1.0
+      - uses: codecov/codecov-action@v4
         with:
           file: ros_ws/lcov/total_coverage.info
           flags: unittests
           name: codecov-umbrella
-      - uses: actions/upload-artifact@v3.1.0
+      - uses: actions/upload-artifact@v4
         with:
           name: colcon-logs-coverage-rolling
           path: ros_ws/log

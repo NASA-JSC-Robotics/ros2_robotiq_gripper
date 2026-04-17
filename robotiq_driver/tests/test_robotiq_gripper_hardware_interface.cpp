@@ -26,23 +26,16 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
-#include <chrono>
-
-#include <robotiq_driver/default_driver_factory.hpp>
-#include <robotiq_driver/hardware_interface.hpp>
-
-#include <hardware_interface/loaned_command_interface.hpp>
-#include <hardware_interface/loaned_state_interface.hpp>
 #include <hardware_interface/resource_manager.hpp>
-#include <hardware_interface/types/lifecycle_state_names.hpp>
-#include <hardware_interface/types/resource_manager_params.hpp>
+#if __has_include(<hardware_interface/hardware_interface/version.h>)
+#include <hardware_interface/hardware_interface/version.h>
+#else
+#include <hardware_interface/version.h>
+#endif
 
-#include <lifecycle_msgs/msg/state.hpp>
-#include <rclcpp_lifecycle/state.hpp>
-
+#include <rclcpp/node.hpp>
 
 namespace robotiq_driver::test
 {
@@ -53,28 +46,19 @@ namespace robotiq_driver::test
  */
 TEST(TestRobotiqGripperHardwareInterface, load_urdf)
 {
-  std::string urdf_control_complete_ =
+  std::string urdf =
       R"(
-        <?xml version="1.0"?>
+        <?xml version="1.0" encoding="utf-8"?>
         <robot name="test_robot">
-          <link name="world"/>
           <link name="robotiq_85_base_link"/>
           <link name="robotiq_85_left_knuckle_link"/>
-          
-          <joint name="world_to_base" type="fixed">
-            <parent link="world"/>
-            <child link="robotiq_85_base_link"/>
-            <origin xyz="0 0 0" rpy="0 0 0"/>
-          </joint>
-          
           <joint name="robotiq_85_left_knuckle_joint" type="revolute">
-            <parent link="robotiq_85_base_link"/>
-            <child link="robotiq_85_left_knuckle_link"/>
-            <origin xyz="0 0 0" rpy="0 0 0"/>
-            <axis xyz="0 0 1"/>
-            <limit lower="0.0" upper="0.8" effort="100" velocity="1.0"/>
+            <parent link="robotiq_85_base_link" />
+            <child link="robotiq_85_left_knuckle_link" />
+            <axis xyz="0 -1 0" />
+            <origin xyz="0.03060114 0.0 0.05490452" rpy="0 0 0" />
+            <limit lower="0.0" upper="0.8" velocity="0.5" effort="50" />
           </joint>
-          
           <ros2_control name="robotiq_driver_ros2_control" type="system">
             <hardware>
               <plugin>robotiq_driver/RobotiqGripperHardwareInterface</plugin>
@@ -92,14 +76,26 @@ TEST(TestRobotiqGripperHardwareInterface, load_urdf)
             </joint>
           </ros2_control>
         </robot>
-       )";
+        )";
 
-  auto clock = std::make_shared<rclcpp::Clock>();
-  auto logger = rclcpp::get_logger("TestRobotiqGripperHardwareInterface");
-  hardware_interface::ResourceManager rm(urdf_control_complete_, clock, logger, false);
+  rclcpp::Node node{ "test_robotiq_gripper_hardware_interface" };
+
+#if HARDWARE_INTERFACE_VERSION_GTE(4, 13, 0)
+  // Initialize the resource manager
+  hardware_interface::ResourceManager rm(urdf, node.get_node_clock_interface(), node.get_node_logging_interface());
+#else
+  hardware_interface::ResourceManager rm(urdf);
+#endif
 
   // Check interfaces
   EXPECT_EQ(1u, rm.system_components_size());
 }
 
 }  // namespace robotiq_driver::test
+
+int main(int argc, char** argv)
+{
+  rclcpp::init(argc, argv);
+  testing::InitGoogleTest(&argc, argv);
+  return RUN_ALL_TESTS();
+}
