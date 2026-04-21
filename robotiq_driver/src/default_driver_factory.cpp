@@ -28,6 +28,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <algorithm>
 
 #include <robotiq_driver/default_driver_factory.hpp>
 #include <robotiq_driver/default_driver.hpp>
