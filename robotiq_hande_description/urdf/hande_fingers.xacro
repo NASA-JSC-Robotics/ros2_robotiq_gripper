@@ -61,7 +61,7 @@
       <parent link="${tf_prefix}gripper_base_link"/>
       <child link="${tf_prefix}finger_1_link"/>
       <axis xyz="1 0 0"/>
-      <limit effort="130" lower="0" upper="0.025" velocity="0.15"/>
+      <limit effort="185" lower="0" upper="0.025" velocity="0.15"/>
     </joint>
 
     <joint name="${tf_prefix}finger_2_joint" type="prismatic">
@@ -69,7 +69,7 @@
       <parent link="${tf_prefix}gripper_base_link"/>
       <child link="${tf_prefix}finger_2_link"/>
       <axis xyz="1 0 0"/>
-      <limit effort="130" lower="0" upper="0.025" velocity="0.15"/>
+      <limit effort="185" lower="0" upper="0.025" velocity="0.15"/>
       <mimic joint="${tf_prefix}finger_1_joint" multiplier="1" offset="0"/>
     </joint>
 
