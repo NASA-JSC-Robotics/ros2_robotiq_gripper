@@ -209,9 +209,9 @@ std::vector<hardware_interface::CommandInterface> RobotiqGripperHardwareInterfac
                                            1.0);
 
   command_interfaces.emplace_back(
-      hardware_interface::CommandInterface("reactivate_gripper", "reactivate_gripper_cmd", &reactivate_gripper_cmd_));
+      hardware_interface::CommandInterface(info_.gpios[0].name, "reactivate_gripper_cmd", &reactivate_gripper_cmd_));
   command_interfaces.emplace_back(hardware_interface::CommandInterface(
-      "reactivate_gripper", "reactivate_gripper_response", &reactivate_gripper_response_));
+    info_.gpios[0].name, "reactivate_gripper_response", &reactivate_gripper_response_));
 
   return command_interfaces;
 }
