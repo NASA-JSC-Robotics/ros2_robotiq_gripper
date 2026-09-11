@@ -31,6 +31,8 @@
           <param name="initial_value">0.020</param>
         </state_interface>
         <state_interface name="velocity"/>
+        <!-- Note that the effort interface just reports NaN, but is required to be compliant with certain controllers that require effort state interfaces -->
+        <state_interface name="effort"/>
       </joint>
 
       <xacro:if value="${use_fake_hardware or sim_ignition}">

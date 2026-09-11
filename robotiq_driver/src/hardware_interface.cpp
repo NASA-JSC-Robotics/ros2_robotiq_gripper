@@ -53,9 +53,7 @@ constexpr auto kGripperCommsLoopPeriod = std::chrono::milliseconds{ 10 };
 namespace robotiq_driver
 {
 RobotiqGripperHardwareInterface::RobotiqGripperHardwareInterface()
-{
-  driver_factory_ = std::make_unique<DefaultDriverFactory>();
-}
+{ driver_factory_ = std::make_unique<DefaultDriverFactory>(); }
 
 RobotiqGripperHardwareInterface::~RobotiqGripperHardwareInterface()
 {
@@ -113,22 +111,23 @@ RobotiqGripperHardwareInterface::on_init(const hardware_interface::HardwareCompo
     return CallbackReturn::ERROR;
   }
 
-  // There are two state interfaces: position and velocity.
-  if (joint.state_interfaces.size() != 2)
+  // There are three state interfaces: position, velocity, and effort.
+  if (joint.state_interfaces.size() != 3)
   {
-    RCLCPP_FATAL(kLogger, "Joint '%s' has %zu state interface. 2 expected.", joint.name.c_str(),
+    RCLCPP_FATAL(kLogger, "Joint '%s' has %zu state interface. 3 expected.", joint.name.c_str(),
                  joint.state_interfaces.size());
     return CallbackReturn::ERROR;
   }
 
-  for (int i = 0; i < 2; ++i)
+  for (int i = 0; i < 3; ++i)
   {
     if (!(joint.state_interfaces[i].name == hardware_interface::HW_IF_POSITION ||
-          joint.state_interfaces[i].name == hardware_interface::HW_IF_VELOCITY))
+          joint.state_interfaces[i].name == hardware_interface::HW_IF_VELOCITY ||
+          joint.state_interfaces[i].name == hardware_interface::HW_IF_EFFORT))
     {
-      RCLCPP_FATAL(kLogger, "Joint '%s' has %s state interface. Expected %s or %s.", joint.name.c_str(),
+      RCLCPP_FATAL(kLogger, "Joint '%s' has %s state interface. Expected %s, %s, or %s.", joint.name.c_str(),
                    joint.state_interfaces.at(i).name.c_str(), hardware_interface::HW_IF_POSITION,
-                   hardware_interface::HW_IF_VELOCITY);
+                   hardware_interface::HW_IF_VELOCITY, hardware_interface::HW_IF_EFFORT);
       return CallbackReturn::ERROR;
     }
   }
@@ -183,6 +182,8 @@ std::vector<hardware_interface::StateInterface> RobotiqGripperHardwareInterface:
       hardware_interface::StateInterface(info_.joints[0].name, hardware_interface::HW_IF_POSITION, &gripper_position_));
   state_interfaces.emplace_back(
       hardware_interface::StateInterface(info_.joints[0].name, hardware_interface::HW_IF_VELOCITY, &gripper_velocity_));
+  state_interfaces.emplace_back(
+      hardware_interface::StateInterface(info_.joints[0].name, hardware_interface::HW_IF_EFFORT, &gripper_effort_));
 
   return state_interfaces;
 }
@@ -226,6 +227,7 @@ RobotiqGripperHardwareInterface::on_activate(const rclcpp_lifecycle::State& /*pr
   {
     gripper_position_ = 0;
     gripper_velocity_ = 0;
+    gripper_effort_ = std::numeric_limits<double>::quiet_NaN();
     gripper_position_command_ = 0;
   }
 
