@@ -148,6 +148,7 @@ protected:
 
   double gripper_position_ = 0.0;
   double gripper_velocity_ = 0.0;
+  double gripper_effort_ = std::numeric_limits<double>::quiet_NaN();
   double gripper_position_command_ = 0.0;
 
   std::atomic<uint8_t> write_command_;
